@@ -29,16 +29,15 @@ postgres_tools = PostgresTools(
     user=os.getenv('DB_USER'),
     password=os.getenv('DB_PASSWORD'),
     run_queries=True,
-    inspect_queries=True,
-    summarize_tables=True
 )
 
 def create_user_agent(user_id):
     # Create an agent with AWS Bedrock model and PostgresTools
     agent = Agent(
         model=Claude(
+            # id="apac.anthropic.claude-3-5-sonnet-20240620-v1:0",
             id="anthropic.claude-3-sonnet-20240229-v1:0",
-            temperature=0.3,
+            temperature=0.1,
             max_tokens=4096
         ),
         debug_mode=True,
@@ -49,6 +48,9 @@ def create_user_agent(user_id):
     
     # Create a system prompt with strict privacy controls and response guidelines
     system_prompt = f"""You are a helpful and friendly AI assistant specifically helping user {user_id}. 
+
+    IMPORTANT: You MUST use the database tools provided to query information. Never make assumptions or return information without querying the database first.
+    If you cannot find the appropriate table in the schema to answer a question, you MUST respond with: "I apologize, but I don't have access to that information in the database."
 
     STRICT PRIVACY RULES:
     1. You can ONLY access and return information about user {user_id}
@@ -67,24 +69,28 @@ def create_user_agent(user_id):
        "I apologize, but I can only provide information about your own account for privacy reasons."
 
     RESPONSE GUIDELINES:
-    1. Provide direct, clean responses without any process explanations
-    2. Never mention technical details, queries, or database structures
-    3. Never explain how you're getting the information
-    4. Never use phrases like "let me check", "I'll need to query", "after checking", etc.
-    5. If you encounter an error, respond with a simple, friendly message like:
+    1. ALWAYS use the database tools to query information before responding
+    2. If you cannot find the appropriate table in the schema, say so clearly
+    3. Provide direct, clean responses without any process explanations
+    4. Never mention technical details, queries, or database structures
+    5. Never explain how you're getting the information
+    6. Never use phrases like "let me check", "I'll need to query", "after checking", etc.
+    7. If you encounter an error, respond with a simple, friendly message like:
        "I'm having trouble accessing that information right now. Could you try again in a moment?"
-    6. Focus on providing clear, actionable information
-    7. Use natural language without technical terms
-    8. If you can't provide specific information, give a general but accurate response
-    9. Start responses directly with the information, not with process explanations
-    10. Keep responses concise and conversational
+    8. Focus on providing clear, actionable information
+    9. Use natural language without technical terms
+    10. If you can't provide specific information, give a general but accurate response
+    11. Start responses directly with the information, not with process explanations
+    12. Keep responses concise and conversational
 
     Database Query Rules:
     - Every query MUST include: WHERE user_id = '{user_id}'
+    - For queries on the binuser table, use: WHERE id = '{user_id}'
     - Never use queries that would return data about multiple users
     - Never use GROUP BY or aggregation functions that would mix data from different users
     - Never join tables in a way that would expose other users' information
     - Keep all technical details internal - never expose them in responses
+    - If a required table is not in the schema, inform the user that you don't have access to that information
 
     Here is the database schema you can use:
     {schema_description}
@@ -94,10 +100,10 @@ def create_user_agent(user_id):
 
 if __name__ == "__main__":
     # Example usage - replace with actual user ID from secure authentication
-    user_id = "REPLACE_WITH_AUTHENTICATED_USER_ID"
+    user_id = "ASK USER ID HERE"
     
     # Example question - replace with actual user query
-    question = "How many items have I dropped?"
+    question = "ASK QNS HERE"
     
     # Create agent and get response
     agent, system_prompt = create_user_agent(user_id)
