@@ -1,0 +1,142 @@
+{
+    "users": {
+        "description": "Stores information about library members",
+        "columns": [
+            {
+                "name": "user_id",
+                "type": "uuid",
+                "description": "Unique identifier for the library member"
+            },
+            {
+                "name": "first_name",
+                "type": "varchar",
+                "description": "Member's first name"
+            },
+            {
+                "name": "last_name",
+                "type": "varchar",
+                "description": "Member's last name"
+            },
+            {
+                "name": "email",
+                "type": "varchar",
+                "description": "Member's email address"
+            },
+            {
+                "name": "membership_date",
+                "type": "timestamp",
+                "description": "When the member joined the library"
+            }
+        ]
+    },
+    "books": {
+        "description": "Catalog of books in the library",
+        "columns": [
+            {
+                "name": "book_id",
+                "type": "uuid",
+                "description": "Unique identifier for the book"
+            },
+            {
+                "name": "isbn",
+                "type": "varchar",
+                "description": "International Standard Book Number"
+            },
+            {
+                "name": "title",
+                "type": "varchar",
+                "description": "Title of the book"
+            },
+            {
+                "name": "author",
+                "type": "varchar",
+                "description": "Author of the book"
+            },
+            {
+                "name": "publication_year",
+                "type": "integer",
+                "description": "Year the book was published"
+            },
+            {
+                "name": "genre",
+                "type": "varchar",
+                "description": "Genre of the book"
+            },
+            {
+                "name": "copies_available",
+                "type": "integer",
+                "description": "Number of copies available for borrowing"
+            }
+        ]
+    },
+    "book_loans": {
+        "description": "Records of books borrowed by members",
+        "columns": [
+            {
+                "name": "loan_id",
+                "type": "uuid",
+                "description": "Unique identifier for the loan record"
+            },
+            {
+                "name": "user_id",
+                "type": "uuid",
+                "description": "Reference to the user who borrowed the book"
+            },
+            {
+                "name": "book_id",
+                "type": "uuid",
+                "description": "Reference to the borrowed book"
+            },
+            {
+                "name": "loan_date",
+                "type": "timestamp",
+                "description": "When the book was borrowed"
+            },
+            {
+                "name": "due_date",
+                "type": "timestamp",
+                "description": "When the book is due to be returned"
+            },
+            {
+                "name": "return_date",
+                "type": "timestamp",
+                "description": "When the book was returned (null if not returned)"
+            }
+        ]
+    },
+    "book_reviews": {
+        "description": "Reviews and ratings for books",
+        "columns": [
+            {
+                "name": "review_id",
+                "type": "uuid",
+                "description": "Unique identifier for the review"
+            },
+            {
+                "name": "book_id",
+                "type": "uuid",
+                "description": "Reference to the reviewed book"
+            },
+            {
+                "name": "user_id",
+                "type": "uuid",
+                "description": "Reference to the user who wrote the review"
+            },
+            {
+                "name": "rating",
+                "type": "integer",
+                "description": "Rating given to the book (1-5)"
+            },
+            {
+                "name": "review_text",
+                "type": "text",
+                "description": "Text of the review"
+            },
+            {
+                "name": "review_date",
+                "type": "timestamp",
+                "description": "When the review was posted"
+            }
+        ]
+    }
+}
