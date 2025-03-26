@@ -93,8 +93,10 @@ def create_user_agent(user_id):
     return agent, system_prompt
 
 if __name__ == "__main__":
-    # Example usage
-    user_id = "151d68bb-778f-43a6-ad51-a0a6d5681e83"
+    # Example usage - replace with actual user ID from secure authentication
+    user_id = "REPLACE_WITH_AUTHENTICATED_USER_ID"
+    
+    # Example question - replace with actual user query
     question = "How many items have I dropped?"
     
     # Create agent and get response
