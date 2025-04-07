@@ -42,9 +42,11 @@ storage = PostgresStorage(
 
 def create_user_agent(user_id):
     agent = Agent(
+        session_id="Get from DB",
+        user_id=user_id,
         model=Claude(
-            # id="apac.anthropic.claude-3-5-sonnet-20240620-v1:0",
-            id="anthropic.claude-3-sonnet-20240229-v1:0",
+            id="apac.anthropic.claude-3-5-sonnet-20240620-v1:0",
+            # id="anthropic.claude-3-sonnet-20240229-v1:0",
             temperature=0.1,
             max_tokens=4096
         ),
@@ -114,28 +116,17 @@ Here is the database schema you can use:
         markdown=True,
     )
     
-    return agent, None  # No need for system_prompt anymore as it's integrated into the agent configuration
+    return agent, None 
 
 if __name__ == "__main__":
     # Example usage - replace with actual user ID from secure authentication
-    user_id = "TYPE ID HERE"
+    user_id = "USER ID HERE"
     
     # Example question - replace with actual user query
-    question1 = "TYPE QNS HERE"
+    question1 = "QNS HERE"
     
     # Create agent and get response
     agent, system_prompt = create_user_agent(user_id)
-    query1 = f"{system_prompt}\n\nFirst Question: {question1}"
-    agent.print_response(query1, stream=True)
+    query = f"{system_prompt}\n\nFirst Question: {question1}"
+    agent.print_response(query, stream=True)
     
-    # query2 = f"{system_prompt}\n\nSecond Question: {question2}"
-    # agent.print_response(query2)
-    
-    # query3 = f"{system_prompt}\n\nThird Question: {question3}"
-    # agent.print_response(query3)
-    
-    # query4 = f"{system_prompt}\n\nFourth Question: {question4}"
-    # agent.print_response(query4)
-    
-    # query5 = f"{system_prompt}\n\nFifth Question: {question5}"
-    # agent.print_response(query5)
